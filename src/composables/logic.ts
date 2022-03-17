@@ -22,6 +22,7 @@ interface MineGame {
 
 export class GamePlay {
   game = ref() as Ref<MineGame>
+  // game = ref<MineGame>()
 
   constructor(public height: number, public width: number, public totalMineNUmber: number) {
     this.resetMines()
