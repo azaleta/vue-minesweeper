@@ -50,7 +50,7 @@ export class GamePlay {
     return count
   }
 
-  private calculateLeftMineNumber = (s: BlockState): number => {
+  private calculateLeftBlockNumber = (s: BlockState): number => {
     return (this.height - s.x - 1) * this.width + this.width - s.y - 1
   }
 
@@ -99,7 +99,7 @@ export class GamePlay {
         const mineNumber = this.calculateMineNumber()
         if (st.x === s.x && st.y === s.y) s.mine = false
         else if (mineNumber >= this.totalMineNUmber) s.mine = false
-        else if (this.calculateLeftMineNumber(s) <= (this.totalMineNUmber - mineNumber)) s.mine = true
+        else if (this.calculateLeftBlockNumber(s) <= (this.totalMineNUmber - mineNumber)) s.mine = true
         else s.mine = Math.random() < 0.2
       }
     }

@@ -14,7 +14,7 @@
   >
     <template v-if="props.state.revealed || props.isDev">
       <div v-if="props.state.mine" i-mdi-bomb />
-      <div v-else>
+      <div v-else font-900>
         {{ props.state.adjacentMine }}
       </div>
     </template>
