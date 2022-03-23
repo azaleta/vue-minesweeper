@@ -10,6 +10,7 @@
     m="0.2"
     :class="getBlockClass()"
     @click="onClick()"
+    @dblclick="onDbClick()"
     @contextmenu.prevent="onRightClick()"
   >
     <template v-if="props.state.revealed || props.isDev">
@@ -29,7 +30,7 @@ import type { BlockState } from '~/types'
 
 const props = defineProps<{ state: BlockState; isDev: boolean }>()
 
-const emit = defineEmits(['onClick', 'onRightClick'])
+const emit = defineEmits(['onClick', 'onDbClick', 'onRightClick'])
 
 const numberColors = [
   'text-transparent', // 0
@@ -51,6 +52,10 @@ const getBlockClass = (): string => {
 
 const onClick = () => {
   emit('onClick', props.state)
+}
+
+const onDbClick = () => {
+  emit('onDbClick', props.state)
 }
 
 const onRightClick = () => {

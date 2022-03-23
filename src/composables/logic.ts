@@ -76,6 +76,14 @@ export class GamePlay {
     })
   }
 
+  private getAroundFlag = (s: BlockState): number => {
+    let count = 0
+    this.getSiblings(s).forEach((sibling) => {
+      if (sibling.flag) count++
+    })
+    return count
+  }
+
   private getSiblings = (st: BlockState) => {
     return DIRECTIONS.map(([dx, dy]) => {
       const targetX = st.x + dx
@@ -117,6 +125,17 @@ export class GamePlay {
     })
   }
 
+  autoExpand = (s: BlockState): void => {
+    if (!s.revealed || this.getAroundFlag(s) !== s.adjacentMine) return
+    this.getSiblings(s).forEach((sibling) => {
+      if (!sibling.revealed && !sibling.flag) {
+        sibling.revealed = true
+        if (sibling.mine) this.game.value.gameStatus = 'lost'
+        if (sibling.adjacentMine === 0) this.revealAround(sibling)
+      }
+    })
+  }
+
   checkStatus = (): void => {
     if (!this.mineGenerrated) return
     let status = true
@@ -130,6 +149,14 @@ export class GamePlay {
       }
     }
     if (status) this.game.value.gameStatus = 'win'
+  }
+
+  reset(height: number, width: number, totalMineNUmber: number) {
+    this.height = height
+    this.width = width
+    this.totalMineNUmber = totalMineNUmber
+
+    this.resetMines()
   }
 
   resetMines = () => {

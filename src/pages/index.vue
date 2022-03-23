@@ -29,6 +29,10 @@ const onClick = (state: BlockState) => {
   else gm.updateStates(state)
 }
 
+const onDbClick = (state: BlockState) => {
+  gm.autoExpand(state)
+}
+
 const onRightClick = (state: BlockState) => {
   if (gm.gameStatus !== 'play') return
   if (!state.revealed) {
@@ -39,6 +43,20 @@ const onRightClick = (state: BlockState) => {
 
 const toggleDev = () => {
   isDev.value = !isDev.value
+}
+
+const startGame = (type: 'easy'| 'mid' | 'hard') => {
+  switch (type) {
+    case 'easy':
+      gm.reset(10, 10, 2)
+      break
+    case 'mid':
+      gm.reset(11, 11, 10)
+      break
+    case 'hard':
+      gm.reset(12, 12, 40)
+      break
+  }
 }
 
 // watchEffect(() => {
@@ -61,6 +79,17 @@ watchEffect(gm.checkStatus)
     <div v-if="gm.gameStatus !== 'play'">
       {{ gm.gameStatus }}
     </div>
+    <div flex="~ gap-1" items-center justify-center p-4>
+      <button btn @click="startGame('easy')">
+        Easy
+      </button>
+      <button btn @click="startGame('mid')">
+        Miduim
+      </button>
+      <button btn @click="startGame('hard')">
+        Hard
+      </button>
+    </div>
     <div v-for="(row, y) in gm.broad" :key="y" flex="~" items-center justify-center>
       <MineBlock
         v-for="(s, x) in row"
@@ -68,6 +97,7 @@ watchEffect(gm.checkStatus)
         :state="s"
         :is-dev="isDev"
         @on-click="onClick(s)"
+        @on-db-click="onDbClick(s)"
         @on-right-click="onRightClick(s)"
       />
     </div>
@@ -80,4 +110,7 @@ watchEffect(gm.checkStatus)
       </button>
     </div>
   </div>
+  <Coffeti
+    :passed="gm.gameStatus === 'win' ? true : false"
+  />
 </template>
